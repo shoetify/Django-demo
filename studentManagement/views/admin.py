@@ -10,6 +10,12 @@ from studentManagement.utils.pagination import Pagination
 def admin_list(request):
     """管理员列表"""
 
+    #检查用户是否已经登录，如果已登录，继续走下去，未登录，跳转为登录页面。
+    #用户发来请求，获取cookie随机字符串，拿着随机字符串到session中查找
+    # info = request.session.get("info")
+    # if not info:
+    #     return redirect('/login')
+
     queryset = models.Admin.objects.all()
     page_object = Pagination(request, queryset)
 
