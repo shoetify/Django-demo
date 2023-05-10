@@ -3,7 +3,9 @@ from django import forms
 from studentManagement import models
 from studentManagement.utils.bootstrap import BootStrapForm
 from studentManagement.utils.encrypt import md5
-from django.shortcuts import redirect
+from django.shortcuts import redirect, HttpResponse
+from studentManagement.utils.checkCode import check_code
+
 
 
 # Form 组件的写法
@@ -66,3 +68,18 @@ def logout(request):
     request.session.clear()
 
     return redirect('/login')
+
+
+from io import BytesIO
+def image_code(request):
+    """生成图片验证码"""
+
+    # 调用utils的checkCode函数，生成图片
+    img, code_str = check_code()
+
+    #将图片保存在stream中
+    stream = BytesIO()
+    img.save(stream, 'png')
+    return HttpResponse(stream.getvalue())
+
+
