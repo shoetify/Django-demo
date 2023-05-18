@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from studentManagement.views import depart, user, pretty, admin, account
+from studentManagement.views import depart, user, pretty, admin, account, task, order
 
 urlpatterns = [
     # path('admin/', admin.site.urls),
@@ -48,4 +48,11 @@ urlpatterns = [
     path('login', account.login),
     path('logout', account.logout),
     path('image/code', account.image_code),
+
+    #任务管理
+    path('task/list', task.task_list),
+    path('task/ajax', task.task_ajax),
+
+    #订单管理
+    path('order/list', order.order_list),
 ]
