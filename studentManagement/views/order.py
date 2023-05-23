@@ -1,6 +1,42 @@
+import json
+import random
+from datetime import datetime
 from django.shortcuts import render
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from studentManagement.utils.bootstrap import BootStrapModelForm
+from studentManagement import models
+
+
+class OrderModelForm(BootStrapModelForm):
+    class Meta:
+        model = models.Order
+        # 该语句会将Order的全部属性生成为表
+        # fields = "__all__"
+
+        # oid（订单号）不需要生成为表
+        exclude = ["oid", "admin"]
+
 
 def order_list(request):
     """订单列表"""
 
-    return render(request, "order_list.html")
+    form = OrderModelForm()
+    return render(request, "order_list.html", {'form': form})
+
+
+@csrf_exempt
+def order_add(request):
+    """新建订单（Ajax请求）"""
+    form = OrderModelForm(data=request.POST)
+    if form.is_valid():
+        # 系统自动填写oid数据
+        form.instance.oid = datetime.now().strftime("%Y%m%d%H%M%S") + str(random.randint(1000, 9999))
+
+        # 获取管理员数据
+        form.instance.admin_id = request.session["info"]["id"]
+
+        form.save()
+        return JsonResponse({"status": True})
+
+    return JsonResponse({"status": False, 'error': form.errors})
