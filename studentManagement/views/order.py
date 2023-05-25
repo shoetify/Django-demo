@@ -6,6 +6,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from studentManagement.utils.bootstrap import BootStrapModelForm
 from studentManagement import models
+from studentManagement.utils.pagination import Pagination
 
 
 class OrderModelForm(BootStrapModelForm):
@@ -21,8 +22,19 @@ class OrderModelForm(BootStrapModelForm):
 def order_list(request):
     """订单列表"""
 
+    queryset = models.Order.objects.all().order_by('-id')
+    page_object = Pagination(request,queryset)
     form = OrderModelForm()
-    return render(request, "order_list.html", {'form': form})
+
+    context = {
+        'form': form,
+        'queryset': page_object.page_queryset,
+        "page_string": page_object.html(),
+    }
+
+
+
+    return render(request, "order_list.html", context)
 
 
 @csrf_exempt

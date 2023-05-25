@@ -38,6 +38,65 @@
         </div>
     </div>
 </div>
+
+<!-- 删除订单（对话框） -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+            <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                <h4>是否确定删除!</h4>
+                <p style="margin: 10px 0;">删除后，所有关联的相关数据会被删除</p>
+                <p style="text-align: right;">
+                    <button type="button" class="btn btn-danger">确 定</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
+                </p>
+            </div>
+    </div>
+</div>
+
+<div class="bs-example" data-example-id="panel-without-body-with-table">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+            订单列表
+        </div>
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>订单号</th>
+                <th>名称</th>
+                <th>价格</th>
+                <th>状态</th>
+                <th>管理员</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for obj in queryset %}
+            <tr>
+                <th>{{ obj.id }}</th>
+                <td>{{ obj.oid }}</td>
+                <td>{{ obj.title }}</td>
+                <td>{{ obj.price }}</td>
+                <td>{{ obj.get_status_display }}</td>
+                <td>{{ obj.admin.username }}</td>
+                <th>
+                    <a class="btn btn-primary btn-xs" href="/admin/{{ obj.id }}/edit">编辑</a>
+                    <a class="btn btn-danger btn-xs" data-toggle="modal" data-target="#deleteModal">删除</a>
+                </th>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<nav aria-label="Page navigation">
+    <ul class="pagination">
+        {{page_string}}
+    </ul>
+</nav>
+
 {% endblock %}
 
 {% block js %}
@@ -45,6 +104,7 @@
         $(function () {
             bindBtnAddEvent();
             bindBtnSaveEvent();
+            bindBtnDeleteEvent();
         })
 
         function bindBtnAddEvent() {}
@@ -69,7 +129,7 @@
                             $("#formAdd")[0].reset();
 
                             // 关闭弹窗
-                            $("#myModal").modal('hide');
+                            $("#myModal").modal('hide');；
                         }else{
                             // 把错误信息显示在对话框中，
                             $.each(res.error, function (name, errorList) {
@@ -79,8 +139,18 @@
                     }
                 })
 
+                function bindBtnDeleteEvent() {
+                    $(".btn-delete").click(function () {
+                        // alert("点击了删除");
+                        // 显示删除对话框
+                        $("#deleteModal").modal('show');
+                    }
+                }
+
             });
         }
+
+
 
 
 </script>
