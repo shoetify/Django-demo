@@ -52,3 +52,10 @@ def order_add(request):
         return JsonResponse({"status": True})
 
     return JsonResponse({"status": False, 'error': form.errors})
+
+def order_delete(request):
+    """删除订单"""
+    uid = request.GET.get('uid')
+    print(uid)
+    models.Order.objects.filter(id=uid).delete()
+    return JsonResponse({"status": True})
