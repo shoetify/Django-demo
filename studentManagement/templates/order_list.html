@@ -33,7 +33,7 @@
                 <td>{{ obj.get_status_display }}</td>
                 <td>{{ obj.admin.username }}</td>
                 <th>
-                    <a class="btn btn-primary btn-xs" href="/admin/{{ obj.id }}/edit">编辑</a>
+                    <input id="{{ obj.id }}" type="button" class="btn btn-primary btn-xs btn-edit" value="编辑">
                     <input id="{{ obj.id }}" class="btn btn-danger btn-xs btn-delete" type="button" value="删除">
                 </th>
             </tr>
@@ -50,7 +50,7 @@
 </nav>
 </div>
 
-<!-- 新建订单（对话框） -->
+<!-- 新建、编辑订单（对话框） -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -107,12 +107,20 @@
             bindBtnSaveEvent();
             bindBtnDeleteEvent();
             bindBtnConfirmDeleteEvent();
+            bindBtnEditEvent();
         })
 
-        function bindBtnAddEvent() {}
+        function bindBtnAddEvent() {
+        }
 
         function bindBtnSaveEvent() {
             $("#btnSave").click(function () {
+
+                // 清空对话框中的数据
+                $("#formAdd")[0].reset();
+
+                // 重新设置对话框的标题
+                $("#myModalLabel").text("New Order");
 
                 // 清楚错误信息
                 $(".error-msg").empty();
@@ -189,6 +197,42 @@
                     }
                 })
             })
+        }
+
+        function bindBtnEditEvent() {
+            $(".btn-edit").click(function () {
+
+                var id = $(this).attr("id");
+
+                // 发送Ajax去后端获取当前行的相关数据
+                $.ajax({
+                    url: "/order/detail",
+                    type: "get",
+                    data: {
+                        uid: id
+                    },
+                    dataType: "JSON",
+                    success: function (res) {
+                        if (res.status){
+
+                            // 修改对话框的标题
+                            $("#myModalLabel").text("Edit Order");
+
+                            // 将数据默认复制到对话框的标签中
+                            $.each(res.data.data, function (name, value) {
+                                $("#id_" + name).val(value);
+                            })
+
+                            // 点击编辑，显示对话框
+                            $('#myModal').modal('show');
+
+
+                        }else{
+                            alert(res.error);
+                        }
+                    }
+                })
+            });
         }
 
 
