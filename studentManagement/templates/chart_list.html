@@ -1,0 +1,93 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+
+{% block content %}
+<div class="container">
+    <div class="panel panel-default">
+        <div class="panel-heading">柱状图</div>
+        <div class="panel-body">
+            <div id="m1" style="width: 600px;height:400px;"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-8">
+            <div class="panel panel-default">
+                <div class="panel-heading">折线图</div>
+                <div class="panel-body">
+                    兔兔兔兔
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">饼图</div>
+                <div class="panel-body">
+                    兔兔兔兔
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
+
+{% block js %}
+<script src="{% static 'js/echarts.js' %}"></script>
+<script type="text/javascript">
+
+    // 发送ajax请求从后台获取数据用于画图
+    $(function () {
+        initBar();
+    })
+
+    /***********
+    * 初始化柱状图
+    ***********/
+
+    function initBar() {
+      // 基于准备好的dom，初始化echarts实例
+      var myChart = echarts.init(document.getElementById('m1'));
+
+      // 指定图表的配置项和数据
+      var option = {
+        title: {
+          text: 'ECharts 入门示例'
+        },
+        tooltip: {},
+        legend: {
+          data: []
+        },
+        xAxis: {
+          data: []
+        },
+        yAxis: {},
+        series: []
+      };
+
+      $.ajax({
+        url: "/chart/bar",
+        type: "GET",
+        dataType: "JSON",
+        success:function (res) {
+
+            // 将后台返回的数据更新到option中
+            if (res.status) {
+                option.legend.data = res.data.legend;
+                option.xAxis.data = res.data.xAxis;
+                option.series = res.data.data_list;
+            }
+
+            // 使用刚指定的配置项和数据显示图表。
+            myChart.setOption(option);
+
+        }
+      })
+
+
+    }
+
+
+</script>
+{% endblock %}

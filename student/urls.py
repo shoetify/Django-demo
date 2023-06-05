@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from studentManagement.views import depart, user, pretty, admin, account, task, order
+from studentManagement.views import depart, user, pretty, admin, account, task, order, chart
 
 urlpatterns = [
     # path('admin/', admin.site.urls),
@@ -58,4 +58,9 @@ urlpatterns = [
     path('order/add', order.order_add),
     path('order/delete', order.order_delete),
     path('order/detail', order.order_detail),
+
+    # 订单管理
+    path('chart/list', chart.chart_list),
+    path('chart/bar', chart.chart_bar),
+
 ]
