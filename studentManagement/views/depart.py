@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, HttpResponse
 from studentManagement import models
 from studentManagement.utils.pagination import Pagination
 
@@ -59,4 +59,24 @@ def depart_edit(request, nid):
         models.Department.objects.filter(id=nid).update(title=new_title)
 
     # 重定向回部门列表
+    return redirect("/depart/list")
+
+def depart_multi(request):
+    """批量上传（execl文件）"""
+    from openpyxl import load_workbook
+
+    # 1. 获取用户上传的文件对象
+    file_object = request.FILES.get("exc")
+
+    # 2. 对象传递给openpyxl，打开excel并读取内容
+    wb = load_workbook(file_object)
+    sheet = wb.worksheets[0]  #第0列的数据
+
+    # 3. 循环获取每一段的数据
+    for row in sheet.iter_rows(min_row=2):
+        text = row[0].value
+        exists = models.Department.objects.filter(title=text).exists()
+        if not exists:
+            models.Department.objects.create(title=text)
+
     return redirect("/depart/list")
