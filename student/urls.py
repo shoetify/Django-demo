@@ -66,5 +66,5 @@ urlpatterns = [
 
     # 上传文件
     path('upload/list', upload.upload_list),
-
+    path('upload/form', upload.upload_form),
 ]
