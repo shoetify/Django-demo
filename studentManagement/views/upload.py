@@ -4,6 +4,8 @@ from studentManagement.utils.bootstrap import BootStrapForm
 import os
 from studentManagement import models
 
+from student.student import settings
+
 
 def upload_list(request):
     """上传文件"""
@@ -44,7 +46,7 @@ def upload_form(request):
         image_object = form.cleaned_data.get("img")
 
         # file_path = "studentManaqement/static/files/{}".format(image_object.name)
-        file_path = os.path.join("studentManagement", "static", "files", image_object.name)
+        file_path = os.path.join(settings.MEDIA_ROOT, image_object.name)
 
         f = open(file_path, mode='wb')
         for chunk in image_object.chunks():

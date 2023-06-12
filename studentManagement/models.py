@@ -78,3 +78,6 @@ class Boss(models.Model):
     img = models.CharField(verbose_name="头像", max_length=128)
 
 
+    # 使用ModelForm储存文件
+    # 本质上数据库也是CharField， 但可以自动保存数据
+    # img = models.FileField(verbose_name="头像", max_length=128, upload_to='boss/' (上传的文件会存储到media目录的“/boss/”中)
