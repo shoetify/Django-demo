@@ -50,16 +50,16 @@ urlpatterns = [
     path('admin/<int:nid>/delete', admin.admin_delete),
     path('admin/<int:nid>/reset', admin.admin_reset),
 
-    #用户登录
+    # 用户登录
     path('login', account.login),
     path('logout', account.logout),
     path('image/code', account.image_code),
 
-    #任务管理
+    # 任务管理
     path('task/list', task.task_list),
     path('task/ajax', task.task_ajax),
 
-    #订单管理
+    # 订单管理
     path('order/list', order.order_list),
     path('order/add', order.order_add),
     path('order/delete', order.order_delete),

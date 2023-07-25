@@ -4,7 +4,7 @@ from studentManagement.utils.bootstrap import BootStrapForm
 import os
 from studentManagement import models
 
-from student.student import settings
+from student import settings
 
 
 def upload_list(request):
